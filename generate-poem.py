@@ -3,8 +3,8 @@
 from run_book import run_book
 
 
-book = "generate-poem"
-inputParameters = {"topic": "Prague", "author": "Franz Kafka"}
+book = "generate-course"
+inputParameters = {"topic": "Prague history", "language": "Čeština"}
 outputParameters = run_book(book, inputParameters)
 
 print('--- output ---')

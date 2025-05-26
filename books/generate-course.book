@@ -1,0 +1,214 @@
+# Generate a course 
+
+Generate content of a course (now with just single lecture) for the user of the Chutoo app
+
+- INPUT PARAM {topic} Free text that describe the topic of the test
+- INPUT PARAM {language} Full name of the language, for example "czech", "english", "esperanto",...
+- OUTPUT PARAM {result} Course in Chutoo JSON format, see https://gitlab.com/husakja/chutoo/-/tree/main/docs/requests?ref_type=heads
+
+
+## Sample of the topic
+
+- EXAMPLE
+
+```
+Prague, mostly the:
+- History
+- Geography
+- Topology
+```
+
+
+-> {topic}
+
+
+
+## Sample of the topic
+
+- EXAMPLE
+
+```
+Cybersecurity and predictions
+
+TODO: @martin.kotek1 and @hejny Link an article
+```
+
+
+-> {topic}
+
+## Write title
+
+```
+Write short title of given topic
+
+**Topic**
+
+> {topic}
+
+**Rules**
+
+- Title must be in the form of a question
+- Your output is in language {language}
+- Write 1-5 words
+```
+
+-> {title}
+
+
+
+## Write article
+
+```
+Write short article given topic
+
+**Topic**
+
+> {topic}
+
+**Rules**
+
+- Test content must be in the form of a question
+- Your output is in language {language}
+- Article must be related to the topic
+- Format of the content is simple plain 
+```
+
+-> {article}
+
+
+
+
+## Generate the questionnaire
+
+- FORMAT JSON
+
+```
+Generate questionnaire about the given topic.
+
+**Topic**
+
+> {topic}
+
+**Rules**
+
+- Questionnaire is json array, each item is object with "question" and "answer" as strings
+- Output js JSON array
+- Your output is in language {language}
+- Test content must be related to the topic
+- Generate 5 questions and answers
+
+
+**Example**
+
+\`\`\`json
+[
+    {
+        "question": "Jaké je hlavní město České republiky?",
+        "answer": "Praha"
+    },
+    {
+        "question": "Na jaké řece se nachází Praha?",
+        "answer": "Vltava"
+    },
+    {
+        "question": "Co je zapsané na seznamu světového dědictví UNESCO v Praze?",
+        "answer": "Historické centrum"
+    },
+    {
+        "question": "Co je Praha známá svým architektonickým dědictvím?",
+        "answer": "Krásnými budovami a architekturou"
+    },
+    {
+        "question": "Jaké kulturní instituce se nacházejí v Praze?",
+        "answer": "Muzea, divadla a galerie"
+    }
+]
+\`\`\`
+
+```
+
+
+-> {questionnaireJson}
+
+## Generate the questionnaire facts
+
+- FORMAT JSON
+
+<!--
+<- TODO: Use FOREACH to itterate through the questions
+-->
+
+```
+Generate facts for the questionnaire
+
+**The questionnaire**
+
+\`\`\`json
+{questionnaireJson}
+\`\`\`
+
+
+**Context**
+
+> {topic}
+
+**Rules**
+
+- Questionnaire facts is json array, each item string
+- Your output is in language {language}
+- Each fact must be related to the topic
+- There should be same number of facts as questions
+
+
+**Example**
+
+\`\`\`json
+[
+    "Praha je hlavní město České republiky",
+    "Praha se nachází na řece Vltavě",
+    "Praha má historické centrum zapsané na seznamu světového dědictví UNESCO",
+    "Praha je známá svým architektonickým dědictvím",
+    "V Praze se nachází mnoho kulturních institucí"
+]
+\`\`\`
+
+```
+
+
+-> {questionnaireFactsJson}
+
+
+## Join the JSON
+
+- SCRIPT
+
+```javascript
+
+let questionnaire = JSON.parse(questionnaireJson || 'null');
+
+if(!Array.isArray(questionnaire)){
+    questionnaire = [questionnaire];
+}
+// <- TODO: This is a temporary solution, valid format should be expected as prompt result
+
+// Note: Look at /docs/schemes/executions/[task_id]/lesson.json
+const lesson = {
+   name: title,
+   language: language,
+   topics: [
+     {
+       name: title,
+       paragraphs: [article],
+       keywords: [],
+       covered_topics: [],
+       questionnaire_facts: JSON.parse(questionnaireFactsJson || 'null'),
+       questionnaire: questionnaire
+     }
+   ]
+};
+
+
+return JSON.stringify(lesson,null,4);
+```
+
+-> {result}
