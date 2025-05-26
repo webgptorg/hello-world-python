@@ -1,0 +1,10 @@
+{
+    "autokill": true,
+    "terminals": [
+        {
+            "name": "✨ Generate poem",
+            "commands": ["./generate-poem.py"],
+            "focus": false
+        }
+    ]
+}
