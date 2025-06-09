@@ -13,5 +13,9 @@
             "url": "https://github.com/webgptorg/hello-world-python/blob/main/README.md#%EF%B8%8F-contributing"
         }
     ],
-    "description": "Welcome! In this repository, you'll find a simple example of how to write your first Book and run it using the Promptbook Engine via the Python."
+    "description": "Welcome! In this repository, you'll find a simple example of how to write your first Book and run it using the Promptbook Engine via the Python.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/webgptorg/hello-world-python"
+    }
 }
