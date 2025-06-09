@@ -1,5 +1,6 @@
 {
     "dependencies": {
         "ptbk": "0.95.0"
-    }
+    },
+    "license": "Apache-2.0"
 }
